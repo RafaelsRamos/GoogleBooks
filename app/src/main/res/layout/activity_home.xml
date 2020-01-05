@@ -1,55 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <data>
-        <variable
-            name="home"
-            type="com.example.fyldproject.ui.home.HomeViewModel" />
-    </data>
-
-    <RelativeLayout
+    <FrameLayout
+        android:id="@+id/home_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="15dp"/>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                tools:context=".Home">
-
-                <view class="androidx.appcompat.app.AlertController$RecycleListView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                </view>
-
-                <ProgressBar
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:foregroundGravity="center" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
+    </FrameLayout>
 
 
-        </androidx.cardview.widget.CardView>
-
-
-
-
-    </RelativeLayout>
-
-
-</layout>
+</RelativeLayout>
 

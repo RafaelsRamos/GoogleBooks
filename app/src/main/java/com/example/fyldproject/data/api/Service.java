@@ -7,8 +7,10 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface Service {
-    @GET("volume")
-    Call<BooksResponse> getBooksFromQuery(@Query("q") String searchQuery, @Query("maxResults") int maxResults, @Query("startIndex") int startIndex);
+    @GET("volumes")
+//    Call<BooksResponse> getBooksFromQuery(@Query("key") String apiKey, @Query("q") String searchQuery);
+    Call<BooksResponse> getBooksFromQuery(@Query("key") String apiKey, @Query("q") String searchQuery, @Query("maxResults") int maxResults, @Query("startIndex") int startIndex);
+
 }
 
 

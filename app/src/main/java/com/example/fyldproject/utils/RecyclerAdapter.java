@@ -9,49 +9,79 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
 import com.example.fyldproject.R;
 import com.example.fyldproject.data.model.Book;
 
 import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
-    private List<Book> bookList;
+    private List<Book> books;
     private Context context;
 
-    public RecyclerAdapter(List<Book> booksList, Context context ) {
-        this.bookList = booksList;
+    private OnBookClickListener mOnBookClickListener;
+
+    public RecyclerAdapter(List<Book> booksList, Context context, OnBookClickListener onBookClickListener ) {
+        this.books = booksList;
         this.context = context;
+
+        this.mOnBookClickListener = onBookClickListener;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_menu, parent, false);
-        return new MyViewHolder(view);
+        return new MyViewHolder(view, mOnBookClickListener);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Book book = bookList.get(position);
-        holder.albumTitle.setText("Test");
+        Book book = books.get(position);
+        holder.title.setText(book.getTitle());
 
-//        Glide.with(context).load("http://books.google.com/books/content?id=iJrS9blx6fIC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api").into(imageView);
+        System.out.println(book);
+        if (book.getImageThumbnail() != null) {
+            GlideUrl glideUrl = new GlideUrl(book.getImageThumbnail());
+            Glide.with(context).load(glideUrl).into(holder.thumbnail);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return bookList.size();
+        return books.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        ImageView album;
-        TextView albumTitle;
+    static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        ImageView thumbnail;
+        TextView title;
+        OnBookClickListener onBookClickListener;
 
-        public MyViewHolder(View itemView) {
+        MyViewHolder(View itemView, OnBookClickListener onBookClickListener) {
             super(itemView);
+            thumbnail = itemView.findViewById(R.id.book_thumbnail);
+            title = itemView.findViewById(R.id.book_title);
+            this.onBookClickListener = onBookClickListener;
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            onBookClickListener.onBookClick(getAdapterPosition());
         }
     }
 
     public void addBooks(List<Book> books) {
-        bookList.addAll(books);
+        this.books.addAll(books);
+        notifyDataSetChanged();
+    }
+
+    public List<Book> getBooks() {
+        return this.books;
+    }
+
+    public interface OnBookClickListener {
+        void onBookClick(int position);
     }
 }
