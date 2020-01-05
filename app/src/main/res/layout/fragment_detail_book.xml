@@ -66,8 +66,12 @@
         android:id="@+id/favorite_image_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/detail_view_buy_button"
         android:src="@mipmap/not_favorite"
-        android:alpha="0.8"/>
+        android:alpha="0.8"
+        android:layout_toEndOf="@+id/detail_view_buy_button"
+        android:layout_alignTop="@id/detail_view_buy_button"
+        android:layout_marginLeft="25dp"/>
 
     <Button
         android:id="@+id/detail_view_buy_button"

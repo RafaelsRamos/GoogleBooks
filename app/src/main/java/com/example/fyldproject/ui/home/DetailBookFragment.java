@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -29,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -76,13 +78,9 @@ public class DetailBookFragment extends Fragment implements View.OnClickListener
     private void checkBookFavorites() {
         retrieveFavorites();
         for (Book book : favoriteBooks) {
-            if (book.getId().equals(bookSelected.getId())) {
-                System.out.println("YOYOYOY WE HAVE ONE OVER HERE");
+            if (book.getId().equals(bookSelected.getId()))
                 isBookInFavorites = true;
-            }
-
         }
-
     }
 
     private void setUIElements(View v) {
@@ -105,6 +103,7 @@ public class DetailBookFragment extends Fragment implements View.OnClickListener
 
         // set favorite imageview image
         setFavoriteImage();
+
     }
 
     @Override
@@ -119,7 +118,7 @@ public class DetailBookFragment extends Fragment implements View.OnClickListener
                     isBookInFavorites = true;
                 } else {
                     isBookInFavorites = false;
-                    retrieveFavorites();
+                    removeBookFromFavorites();
                 }
                 setFavoriteImage();
                 break;
@@ -153,6 +152,30 @@ public class DetailBookFragment extends Fragment implements View.OnClickListener
                 }
             }
         }
+        Toast.makeText(getActivity().getApplicationContext(), "Book added to favorites", Toast.LENGTH_LONG).show();
+    }
+
+    private void removeBookFromFavorites() {
+        favoriteBooks.remove(bookSelected);
+        Gson gson = new Gson();
+
+        FileOutputStream fileOutputStream = null;
+        String jsonString = gson.toJson(favoriteBooks);
+        try {
+            fileOutputStream = getActivity().openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
+            fileOutputStream.write(jsonString.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fileOutputStream != null) {
+                try {
+                    fileOutputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        Toast.makeText(getActivity().getApplicationContext(), "Book Removed to favorites", Toast.LENGTH_LONG).show();
     }
 
     private void retrieveFavorites() {
@@ -166,12 +189,14 @@ public class DetailBookFragment extends Fragment implements View.OnClickListener
             InputStreamReader inputStreamReader = new InputStreamReader(fis);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             StringBuilder stringBuilder = new StringBuilder();
+
             while((jsonText = bufferedReader.readLine()) != null) {
                 stringBuilder.append(jsonText).append("\n");
             }
 
             jsonText = stringBuilder.toString();
-            favoriteBooks = Arrays.asList(gson.fromJson(jsonText, Book[].class));
+            favoriteBooks = new LinkedList<>(Arrays.asList(gson.fromJson(jsonText, Book[].class)));
+//            favoriteBooks = Arrays.asList(gson.fromJson(jsonText, Book[].class));
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -186,7 +211,6 @@ public class DetailBookFragment extends Fragment implements View.OnClickListener
                 }
             }
         }
-
     }
 
     private void openBuyLink() {
