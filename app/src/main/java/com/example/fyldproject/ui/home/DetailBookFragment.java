@@ -156,7 +156,16 @@ public class DetailBookFragment extends Fragment implements View.OnClickListener
     }
 
     private void removeBookFromFavorites() {
-        favoriteBooks.remove(bookSelected);
+        for (int i = 0; i < favoriteBooks.size(); i++) {
+            if (favoriteBooks.get(i).getId().equals(bookSelected.getId()))
+                favoriteBooks.remove(i);
+        }
+        for (Book bk : favoriteBooks) {
+            System.out.println("Favorite: " + bk.getId());
+        }
+
+//        favoriteBooks.remove(bookSelected);
+
         Gson gson = new Gson();
 
         FileOutputStream fileOutputStream = null;

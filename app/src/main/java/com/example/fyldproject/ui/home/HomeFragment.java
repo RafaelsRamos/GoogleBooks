@@ -195,11 +195,16 @@ public class HomeFragment extends Fragment implements RecyclerAdapter.OnBookClic
                 if (!isFilteredByFavorites) {
                     List<Book> favoriteBooks = retrieveFavorites();
                     if (favoriteBooks != null) {
-                        isFilteredByFavorites = true;
-                        adapter = new RecyclerAdapter(retrieveFavorites(), getActivity().getApplicationContext(), clickListener);
-                        recyclerView.setAdapter(adapter);
+                        if (!favoriteBooks.isEmpty()) {
+                            isFilteredByFavorites = true;
+                            adapter = new RecyclerAdapter(retrieveFavorites(), getActivity().getApplicationContext(), clickListener);
+                            recyclerView.setAdapter(adapter);
+                        }
+                        else {
+                            displayToast("No favorite books yet");
+                        }
                     } else {
-                        Toast.makeText(getActivity().getApplicationContext(), "No favorite books yet", Toast.LENGTH_LONG).show();
+                        displayToast("No favorite books yet");
                     }
                 } else {
                     isFilteredByFavorites = false;
@@ -207,6 +212,9 @@ public class HomeFragment extends Fragment implements RecyclerAdapter.OnBookClic
                 }
                 break;
         }
+    }
+    private void displayToast(String message) {
+        Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
 
