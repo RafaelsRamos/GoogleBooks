@@ -72,7 +72,7 @@ namespace GoogleBooks
             try {
                 bookSelectedListener = (BookSelectedListener)Activity; 
             }
-            catch (Exception e) { }
+            catch (Exception) { }
         }
 
         private async void LoadBooks()

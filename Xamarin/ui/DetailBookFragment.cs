@@ -216,10 +216,9 @@ namespace GoogleBooks
         {
             try
             {
-                Log.Debug("MYMYMY", bookSelected.id);
                 Xamarin.Forms.Device.OpenUri(new Uri(bookSelected.GetBuyUrl()));
             }
-            catch (ArgumentNullException ex)
+            catch (ArgumentNullException)
             {
                 Toast.MakeText(Activity.ApplicationContext, "Book link unavailable", ToastLength.Long).Show();
             }
